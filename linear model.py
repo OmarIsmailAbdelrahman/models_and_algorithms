@@ -55,7 +55,7 @@ class linearModel(model):
                    t = 0
                    tri = "p"
                t+=1
-               if t > 10:
+               if t > 5:
                 self.alpha *= 2
                 print("change in the alpha",self.alpha)
            else:
@@ -63,7 +63,7 @@ class linearModel(model):
                    t = 0
                    tri = "n"
                t+=1
-               if t > 10:
+               if t > 5:
                 self.alpha /= 2
                 print("change in the alpha",self.alpha)
            print(i, cost)
@@ -96,24 +96,27 @@ true_slope = 13.0
 true_intercept = 3.15
 X = np.arange(0.0, dataSize)
 random.shuffle(X)
-y = true_slope * X + true_intercept + 50 * np.random.rand(len(X))
-X =X/(dataSize)
-y = y/dataSize
 
-# X = np.random.randint(100,size = (10,5))
-# y = np.random.randint(10,size = (10))
-# X = np.sort(X)
-# y = np.sort(y)
-# y = np.reshape(y,(10,1))
 
-X = np.reshape(X,(dataSize,1))
+X = np.random.randint(100,size = (1000,300))/100
+y = np.random.randint(10000,size = (1000))/100
+X = np.sort(X)
+y = np.sort(y)
+
+
+#y = true_slope * X + true_intercept + 50 * np.random.rand(len(X))
+X =X/(X.max())
+y = y/y.max()
+
+#X = np.reshape(X,(dataSize,1))
 sad = linearModel(X,y)
-we = sad.train(maxiter=7000)
+we = sad.train(maxiter=5000)
 reg = LinearRegression().fit(X, y)
 
 print()
-print("model difference", sad.W[0]-reg.intercept_,sad.W[1]-reg.coef_)
-print(sad.W)
+print("model difference", sad.W[0]-reg.intercept_)
+print((sad.W[1:]-reg.coef_))
+print("model parameters:",sad.W)
 
 
 
