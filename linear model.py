@@ -11,6 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 import sys
 np.set_printoptions(threshold=sys.maxsize)
+
 class model(ABC):
     @abstractmethod
     def miniGradient(self, biasflag,batch_size,maxiter):
@@ -140,9 +141,12 @@ plt.show()
 #Standardization using  Z-score Normalization
 #Standardization is more effective if the feature has a Gaussian distribution
 
-###conclution: observe the data before training, it might heavely effect the model and the output, also check the distribution of data too
-
 #2.changing the alpha while training model will help convergence a lot faster
 
+#3.cost function doesn't always converge to zero, because the best solution might not intersect with any data, it will have the lowest cost function
+#but not equal to zero.
+
+###conclution: observe the data before training, it might heavely effect the model and the output, also check the distribution of data too
+###try out different alpha values or use momentum
 
 #Q:##i cant find the problem here, the model in big numbers not work correctly and the cost is too big, when i sacle it works fine.
