@@ -111,7 +111,7 @@ y = y/y.max()
 
 #X = np.reshape(X,(dataSize,1))
 sad = linearModel(X,y)
-we = sad.train(maxiter=5000)
+we = sad.train(maxiter=500)
 reg = LinearRegression().fit(X, y)
 
 print()
