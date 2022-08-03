@@ -7,10 +7,10 @@ import sys
 np.set_printoptions(threshold=sys.maxsize)
 
 #normaly distruction data
-mean = 0
-sd = 7
-x = np.random.normal(mean,sd, 1000)
-
+# mean = 10
+# sd = 700
+# x = np.random.normal(mean,sd, 1500)
+x = np.arange(0.0, 500)-250
 #sin function
 # t = []
 # for i in range(s.shape[0]):
@@ -19,8 +19,12 @@ x = np.random.normal(mean,sd, 1000)
 # y = y + 5 * np.random.rand(len(s))
 # print(t,t.shape)
 
-#Curve for polynomial 2x² -5x + 4 = 0
-y =  2*np.power(x,2) + (-5 * x) + 4
+#Curve for polynomial 2x² +500x + 0 = y
+a = 2
+b = 5
+c = 20
+d = 5
+y =  a* np.power(x,3)+ b*np.power(x,2) + (c * x) + d
 #Curve for polynomial 2x² -5x + 4 = 0
 # mean = 0
 # sd = 5
@@ -34,53 +38,49 @@ y =  2*np.power(x,2) + (-5 * x) + 4
 
 
 
-
-class PolynomailRegression():
-    degree = 3
-    alpha = 0.0001
-    iterations = 200
-    def __int__(self,degree = 2,alpha = 0.000000000000001,iterations = 200):
+class PolynomailRegression:
+    degree=2
+    alpha=0.001
+    iterations=200
+    def __init__(self,degree = 2,alpha = 0.0001,iterations = 200):
         self.degree = degree
         self.alpha = alpha
         self.iterations = iterations
-    def train(self,X,y,degree = 2,iterations = 1000):
-        #weight intilization
+
+    def transformation(self, X):
+        transformation = np.ones(X.shape[0])
+        for i in range(self.degree):
+            temp = np.power(X, i + 1)
+            transformation = np.vstack((transformation, temp))
+        return transformation
+    def train(self,X,y,):
         prev = 0
-        num = 0
-        t=0
-        tri = ""
-        W = np.zeros(degree+1)
-        #cost function calculation and updating weights
-        for i in range(iterations):
-            cost = 0
-            for j in range(degree+1):
-                z = np.array(X)
-                z = np.power(z,j)
-                cost+= np.dot(z,W[j])
-            cost = ( y-cost)
-            print("cost",cost.max())
-            prev = cost
-            for j in range(degree+1):
-                temp = np.array(X)
-                temp = np.power(temp,j)
-                temp = np.transpose(temp)
-                sad = np.dot(temp,cost)*(self.alpha/X.shape[0])
-                print(j,'    ', sad)
-                W[j] = W[j] + sad
-            print("w", W)
-            print()
-            #print(i,W)
-        return W
-            #print(i,cost)
+        self.t=0
+        self.tri =""
+        trans = self.transformation(X)
+        trans = np.transpose(trans)
+        #weights initialization
+        w = np.zeros(self.degree+1)
+        for i in range(self.iterations):
+           cost = ( np.dot(trans,w) - y)
+           prev = cost
+           w = w - np.dot(np.transpose(trans), cost)*self.alpha*(1/X.shape[0])
+           print(i,w)
+        return w
 
 
-model = PolynomailRegression()
-print(x)
-#print(x)
-weights = model.train(x,y,iterations = 500)
-
-y_ = weights[2] *np.power(x,2) + (weights[1] * x) + weights[0]
-print("check result",y_-y)
-plt.scatter(x,y)
+model = PolynomailRegression(iterations = 80000,degree=3,alpha=0.00000000000005)
+weights = model.train(x,y)
+# y_ = weights[2] *np.power(x,2) + (weights[1] * x) + weights[0]
+#Curve for polynomial 2x² -5x + 4 = 0
+print(x.shape,weights.shape)
+y_ = 0
+for i in range(weights.shape[0]):
+    y_ = y_ + weights[i]*np.power(x,i)
+print("real",d,c,b,a)
+print("hypothesis",weights)
+print("difference", d-weights[0],c-weights[1],b-weights[2],a-weights[3])
+print("check result",(y_-y).max())
 plt.scatter(x,y_)
+plt.scatter(x,y)
 plt.show()

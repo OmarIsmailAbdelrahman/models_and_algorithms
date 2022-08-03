@@ -107,7 +107,7 @@ y = np.sort(y)
 
 #y = true_slope * X + true_intercept + 50 * np.random.rand(len(X))
 X =X/(X.max())
-y = y/y.max()
+y = y/X.max()
 
 #X = np.reshape(X,(dataSize,1))
 sad = linearModel(X,y)
