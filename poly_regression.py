@@ -22,9 +22,11 @@ x = np.arange(0.0, 500)-250
 #Curve for polynomial 2x² +500x + 0 = y
 a = 2
 b = 5
-c = 20
-d = 5
-y =  a* np.power(x,3)+ b*np.power(x,2) + (c * x) + d
+c = 2000
+d = 500
+e = 300
+f = -5
+y =  a* np.power(x,5)+ b*np.power(x,4) + (c * np.power(x,3)) + (d*np.power(x,2)) + (e*np.power(x,1)) + f
 #Curve for polynomial 2x² -5x + 4 = 0
 # mean = 0
 # sd = 5
@@ -69,7 +71,7 @@ class PolynomailRegression:
         return w
 
 
-model = PolynomailRegression(iterations = 80000,degree=3,alpha=0.00000000000005)
+model = PolynomailRegression(iterations = 8000,degree=5,alpha=0.000000000000000000000005)
 weights = model.train(x,y)
 # y_ = weights[2] *np.power(x,2) + (weights[1] * x) + weights[0]
 #Curve for polynomial 2x² -5x + 4 = 0
@@ -77,9 +79,9 @@ print(x.shape,weights.shape)
 y_ = 0
 for i in range(weights.shape[0]):
     y_ = y_ + weights[i]*np.power(x,i)
-print("real",d,c,b,a)
+print("real",f,e,d,c,b,a)
 print("hypothesis",weights)
-print("difference", d-weights[0],c-weights[1],b-weights[2],a-weights[3])
+print("difference",f-weights[0],e-weights[1], d-weights[2],c-weights[3],b-weights[4],a-weights[5])
 print("check result",(y_-y).max())
 plt.scatter(x,y_)
 plt.scatter(x,y)
