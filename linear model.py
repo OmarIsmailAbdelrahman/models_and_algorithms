@@ -140,8 +140,8 @@ plt.show()
 # conclusion: observe the data before training, it might heavily affect the model and the output, also check the distribution of data to
 # try out different alpha values or use momentum
 
-# Q:##I can't find the problem here, the model in big numbers not work correctly and the cost is too big, when I scale it works fine.
-
+# Q: I can't find the problem here, the model in big numbers not work correctly and the cost is too big, when I scale it works fine.
+# Q: i don't understand the distribution of the prior in MAP
 
 # mathematical derivation:
 #   y is y actual amd y' is predicted, and it is equal to theta*X
@@ -158,6 +158,10 @@ plt.show()
 #   "in maximization problem taking the log does"
 #   taking the log of P "it won't affect solution because it will not change the function characteristics " will give us
 #   the cost function sum of squared error
+#
+#   we can derived the equation for the less square error by maximizing the Likelihood
+#   and using the Map maximization we get the regularization term L2
+#
 #
 #   "The likelihood function describes the joint probability of the observed data as a function of the parameters of the chosen statistical model."
 #
