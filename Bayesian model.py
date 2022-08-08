@@ -1,4 +1,4 @@
-# on construction
+# under construction
 
 
 #   This model is based on bayesian rule
