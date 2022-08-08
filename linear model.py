@@ -158,3 +158,13 @@ plt.show()
 #   "in maximization problem taking the log does"
 #   taking the log of P "it won't affect solution because it will not change the function characteristics " will give us
 #   the cost function sum of squared error
+#
+#   "The likelihood function describes the joint probability of the observed data as a function of the parameters of the chosen statistical model."
+#
+#   more thoughts in Likelihood:
+#   the idea here is that the hypothesis create a function that predict the dependent variable y' = WX , and because the hypothesis might be wrong
+#   we added to the function an error term that follow normal distribution and have mean of zero y' = WX + e , this make the dependent variable have a distribution that
+#   have mean of WX, observing data -either its correct or have error-, we can find the probability using the distribution.
+#   having high probability means that the hypothesis have a high probability to capture a real data point, and the same goes the other way
+#   and the hypothesis space is the weights W because they are the parameters of the function y, so finding the best hypothesis "Weights" means finding
+#   the hypothesis with the highest data point probability.
