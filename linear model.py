@@ -160,7 +160,9 @@ plt.show()
 #   the cost function sum of squared error
 #
 #   we can derived the equation for the less square error by maximizing the Likelihood
-#   and using the Map maximization we get the regularization term L2
+#   and using the Map maximization we get the regularization term L2, this will make the weights converge to lower values because of the prior distribution
+#   and the prior distribution doesn't have to be centered in zero, and the covariance matrix have to be diagonal ["the Axes doesn't have to be equal each other"]
+#   and the weights doesn't have to be correlated
 #
 #
 #   "The likelihood function describes the joint probability of the observed data as a function of the parameters of the chosen statistical model."

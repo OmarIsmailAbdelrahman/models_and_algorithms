@@ -26,9 +26,11 @@ c = 0
 d = 0
 e = -5
 f = 0
-y = a * np.power(x, 5) +( e *x)
-plt.scatter(x,y)
+y = a * np.power(x, 5) + (e * x)
+plt.scatter(x, y)
 plt.show()
+
+
 # y = a * np.power(x, 3) + b * np.power(x, 2) + c * np.power(x, 1) + d + 500 * np.random.rand(len(x))
 
 
@@ -103,7 +105,7 @@ class PolynomailRegression:
             return self.m / (np.sqrt(self.v) + (10 ** -6)) * (math.sqrt(1 - self.qv) / 1 - self.qm)
         return X
 
-    def train(self, X, y, term="",opt = ""):
+    def train(self, X, y, term="", opt=""):
         self.opt = opt
         self.terms = term
         # tranforming data
@@ -125,9 +127,11 @@ class PolynomailRegression:
             cost = pred - y
             if self.iterations > 100:
                 grad.append(cost.max())
-            print(i, cost.max(),self.w)
+            print(i, cost.max(), self.w)
             # updating weights
-            self.w = self.w - self.alpha * (1 / X.shape[0]) * self.optimizer(self.opt, np.dot(norm.T, cost)) + self.regularization(self.w,self.alpha * 10 ** 3)
+            self.w = self.w - self.alpha * (1 / X.shape[0]) * self.optimizer(self.opt, np.dot(norm.T,
+                                                                                              cost)) + self.regularization(
+                self.w, self.alpha * 10 ** 3)
 
         plt.plot(range(len(grad)), np.array(grad))
         plt.show()
@@ -136,13 +140,13 @@ class PolynomailRegression:
 
 
 model = PolynomailRegression(iterations=200000, degree=5, alpha=0.00000000000001)
-weights = model.train(x, y, term = "",opt = "").w
+weights = model.train(x, y, term="", opt="").w
 
 y_ = 0
 for i in range(weights.shape[0]):
     y_ = y_ + weights[i] * np.power(x, i)
 
-print("real", f,e,d, c, b, a)
+print("real", f, e, d, c, b, a)
 print("hypothesis", weights)
 
 # print("difference", f - weights[0], e - weights[1], d - weights[2], c - weights[3], b - weights[4], a - weights[5])
@@ -163,3 +167,19 @@ plt.show()
 # problems:
 # 1. coff of leading power is accurate, but the less the power the less the accuracy it gets
 # 2. i need a very small alpha in high degree so some reason
+
+
+# Generalized Linear Models:
+#   this model can use transformation to do non-linear regression, which maps inputs to a different space and do a linear/classification in the hyper plane of that space,
+#   the mapping is done to space that make the input a linear in the new space but in the original space it's a non-linear          example Φ(x) = x^3
+#   this means if we have a quadratic function we map the quadratic input to a quadratic space that
+#   make the input a linear and solve it. this will help us find almost all functions, and we can use any non-linear transformation like gaussian and etc
+#   the change to the cost is that X will be equal to Φ(X) where Φ is vector that might have more than 1 non-linear function
+
+#   personal thoughts:
+#   i think that means that we use a Φ(x) to get to the y, so the equation will be y = W Φ(x) in which we just use a simple function and try to find the coefficient, and that's why choosing Φ() will be critical
+#   because choosing the wrong function will not give us the solution, as an example if the true function is y = sin(x) , if we didn't use Φ(x) = sin(x) then we won't reach any solution:
+#
+#
+#
+
