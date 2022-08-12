@@ -1,4 +1,107 @@
 # under construction
+import sys
+import math
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+
+np.set_printoptions(threshold=sys.maxsize)
+
+
+class logistic:
+    def __init__(self, alpha=0.01, multi_class="", max_iter=1000, penalty=""):
+        self.W = None
+        self.alpha = alpha
+        self.multi_class = multi_class
+        self.max_iter = max_iter
+        self.penalty = penalty
+
+    def sigmoid(self, z, Base=math.e):
+        tmp = 1 / (1 + np.exp(-z.dot(self.W)))
+        return tmp
+
+    def predict(self, z, Base=math.e):
+        tmp = 1 / (1 + np.exp(-z.dot(self.W)))
+        for i in range(tmp.shape[0]):
+            if tmp[i] >0.5:
+                tmp[i] = 1
+            else:
+                tmp[i] = 0
+        return tmp
+
+    def standrization(self,X):
+        temp = np.ones(shape = X.shape)
+        for i in range(1,X.shape[1]):
+            #print(i,X[:,i])
+            temp[:,i] = (X[:,i] - np.mean(X[:, i])) / np.std(X[:, i])
+        return temp
+    def regularization(self, lamb):
+        if self.penalty.lower() == "l2":
+            return lamb * np.sum(self.W**2)
+        elif self.penalty.lower() == "l1":
+            tmp = np.fabs(self.W)
+            return tmp.sum()
+        return 0
+
+    def gradientDecent(self,batch,batchy):
+        h = self.sigmoid(batch)
+        cost = h - batchy
+        return  self.W - batch.T.dot(cost)*self.alpha
+
+    def train(self, X, y, lamb=0.2):
+
+        # initializing the weights
+        self.W = np.ones(X.shape[1] + 1)
+        # adding ones column to data
+        X = np.vstack((np.ones(X.shape[0]), X.T)).T
+
+        # normalization Data
+        #self.standrization(X)
+        for i in range(self.max_iter):
+
+            # this is batch, i think :D
+            s1 = min(((i * int(X.shape[0] / 10)) % X.shape[0]), (((i + 1) * int(X.shape[0] / 10)) % X.shape[0]))
+            s2 = max(((i * int(X.shape[0] / 10)) % X.shape[0]), (((i + 1) * int(X.shape[0] / 10)) % X.shape[0]))
+            if s1 < X.shape[0] / 10:
+                s1 = s2-int(X.shape[0] / 10)
+            batch = X[s1:s2, :]
+            batchy = y[s1:s2]
+
+            #print(batch.shape, batchy.shape, s1, s2)
+            #print(i,y_)
+            gradient = self.gradientDecent(batch,batchy)
+            print(gradient.sum())
+            self.W = gradient + self.regularization(0.005)
+
+df = pd.read_csv("Social_Network_Ads.csv")
+df["Gender"] = df.apply(LabelEncoder().fit_transform)["Gender"]
+X = df.drop(["Purchased", "User ID"], axis=1).to_numpy()
+y = df["Purchased"].to_numpy()
+model = logistic(alpha=0.1,penalty="L2",max_iter=1000)
+X = model.standrization(X)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model.train(X_train, y_train)
+X_test =  np.vstack((np.ones(X_test.shape[0]), X_test.T)).T
+print(model.W)
+false = 0
+t = model.predict(X_test)
+for i in range(t.shape[0]):
+    if t[i] != y_test[i] :
+        false +=1
+print("accuracy",false,"of",t.shape[0],1-false/y_test.shape[0])
+
+
+
+
+
+
+
+
+
+
 
 
 #   mathematical  of MIXTURE OF GAUSSIAN DISTRIBUTION  :

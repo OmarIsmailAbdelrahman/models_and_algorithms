@@ -3,14 +3,14 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="\KNNdiabetes.csv">
+        <entry key="\Algorithms\Classification\Iris.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="\diabetes.csv">
+        <entry key="\Algorithms\Classification\Social_Network_Ads.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

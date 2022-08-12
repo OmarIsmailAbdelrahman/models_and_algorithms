@@ -86,7 +86,7 @@ class PolynomailRegression:
         elif self.terms.lower() == "l2":
             for i in range(len(w)):
                 t += math.pow(w[i], 2)
-            return math.sqrt(t) * B
+            return t * B
         elif self.terms.lower() == "Lmax":
             return math.fabs(w.max())
         else:
@@ -158,28 +158,13 @@ plt.scatter(x, y, color="black", label="real")
 plt.show()
 
 # tips:
-# 1. PASSING PARAMETERE DOESN'T COPY IT
+# 1. PASSING PARAMETER DOESN'T COPY IT
 # 2.use Normalization function to
 # 3. difference between the normalization and standardization is important, but they can give the same model
-# 4. overfitting can be sakved using large dataset "data points not features because features will increase complexity"
+# 4. overfitting can be saved using large dataset "data points not features because features will increase complexity"
 # or regularization technique
 
 # problems:
 # 1. coff of leading power is accurate, but the less the power the less the accuracy it gets
 # 2. i need a very small alpha in high degree so some reason
-
-
-# Generalized Linear Models:
-#   this model can use transformation to do non-linear regression, which maps inputs to a different space and do a linear/classification in the hyper plane of that space,
-#   the mapping is done to space that make the input a linear in the new space but in the original space it's a non-linear          example Φ(x) = x^3
-#   this means if we have a quadratic function we map the quadratic input to a quadratic space that
-#   make the input a linear and solve it. this will help us find almost all functions, and we can use any non-linear transformation like gaussian and etc
-#   the change to the cost is that X will be equal to Φ(X) where Φ is vector that might have more than 1 non-linear function
-
-#   personal thoughts:
-#   i think that means that we use a Φ(x) to get to the y, so the equation will be y = W Φ(x) in which we just use a simple function and try to find the coefficient, and that's why choosing Φ() will be critical
-#   because choosing the wrong function will not give us the solution, as an example if the true function is y = sin(x) , if we didn't use Φ(x) = sin(x) then we won't reach any solution:
-#
-#
-#
 
