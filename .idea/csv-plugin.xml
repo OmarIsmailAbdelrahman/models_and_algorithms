@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="C:\Users\Legendary\OneDrive\Desktop\train.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\Algorithms\Classification\Iris.csv">
           <value>
             <Attribute>
@@ -11,6 +18,20 @@
           </value>
         </entry>
         <entry key="\Algorithms\Classification\Social_Network_Ads.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Algorithms\Classification\diabetes.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\Algorithms\NN\Titanic for NN.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

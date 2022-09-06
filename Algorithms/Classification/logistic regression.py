@@ -19,37 +19,38 @@ class logistic:
         self.max_iter = max_iter
         self.penalty = penalty
 
-    def sigmoid(self, z, Base=math.e):
+    def sigmoid(self, z, base=math.e):
         tmp = 1 / (1 + np.exp(-z.dot(self.W)))
         return tmp
 
-    def predict(self, z, Base=math.e):
+    def predict(self, z, base=math.e):
         tmp = 1 / (1 + np.exp(-z.dot(self.W)))
         for i in range(tmp.shape[0]):
-            if tmp[i] >0.5:
+            if tmp[i] > 0.5:
                 tmp[i] = 1
             else:
                 tmp[i] = 0
         return tmp
 
-    def standrization(self,X):
-        temp = np.ones(shape = X.shape)
-        for i in range(1,X.shape[1]):
-            #print(i,X[:,i])
-            temp[:,i] = (X[:,i] - np.mean(X[:, i])) / np.std(X[:, i])
+    def standrization(self, X):
+        temp = np.ones(shape=X.shape)
+        for i in range(1, X.shape[1]):
+            # print(i,X[:,i])
+            temp[:, i] = (X[:, i] - np.mean(X[:, i])) / np.std(X[:, i])
         return temp
+
     def regularization(self, lamb):
         if self.penalty.lower() == "l2":
-            return lamb * np.sum(self.W**2)
+            return lamb * np.sum(self.W ** 2)
         elif self.penalty.lower() == "l1":
             tmp = np.fabs(self.W)
             return tmp.sum()
         return 0
 
-    def gradientDecent(self,batch,batchy):
+    def gradientDecent(self, batch, batchy):
         h = self.sigmoid(batch)
         cost = h - batchy
-        return  self.W - batch.T.dot(cost)*self.alpha
+        return self.W - batch.T.dot(cost) * self.alpha
 
     def train(self, X, y, lamb=0.2):
 
@@ -59,50 +60,40 @@ class logistic:
         X = np.vstack((np.ones(X.shape[0]), X.T)).T
 
         # normalization Data
-        #self.standrization(X)
+        # self.standrization(X)
         for i in range(self.max_iter):
 
             # this is batch, i think :D
             s1 = min(((i * int(X.shape[0] / 10)) % X.shape[0]), (((i + 1) * int(X.shape[0] / 10)) % X.shape[0]))
             s2 = max(((i * int(X.shape[0] / 10)) % X.shape[0]), (((i + 1) * int(X.shape[0] / 10)) % X.shape[0]))
             if s1 < X.shape[0] / 10:
-                s1 = s2-int(X.shape[0] / 10)
+                s1 = s2 - int(X.shape[0] / 10)
             batch = X[s1:s2, :]
             batchy = y[s1:s2]
 
-            #print(batch.shape, batchy.shape, s1, s2)
-            #print(i,y_)
-            gradient = self.gradientDecent(batch,batchy)
+            # print(batch.shape, batchy.shape, s1, s2)
+            # print(i,y_)
+            gradient = self.gradientDecent(batch, batchy)
             print(gradient.sum())
-            self.W = gradient + self.regularization(0.005)
+            self.W = gradient + self.regularization(0.001)
 
-df = pd.read_csv("Social_Network_Ads.csv")
-df["Gender"] = df.apply(LabelEncoder().fit_transform)["Gender"]
-X = df.drop(["Purchased", "User ID"], axis=1).to_numpy()
-y = df["Purchased"].to_numpy()
-model = logistic(alpha=0.1,penalty="L2",max_iter=1000)
+
+df = pd.read_csv("diabetes.csv")
+# df["Gender"] = df.apply(LabelEncoder().fit_transform)["Gender"]
+X = df.drop(["Outcome"], axis=1).to_numpy()
+y = df["Outcome"].to_numpy()
+model = logistic(alpha=0.1, penalty="L2", max_iter=10000)
 X = model.standrization(X)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 model.train(X_train, y_train)
-X_test =  np.vstack((np.ones(X_test.shape[0]), X_test.T)).T
+X_test = np.vstack((np.ones(X_test.shape[0]), X_test.T)).T
 print(model.W)
 false = 0
 t = model.predict(X_test)
 for i in range(t.shape[0]):
-    if t[i] != y_test[i] :
-        false +=1
-print("accuracy",false,"of",t.shape[0],1-false/y_test.shape[0])
-
-
-
-
-
-
-
-
-
-
-
+    if t[i] != y_test[i]:
+        false += 1
+print("accuracy", false, "of", t.shape[0], 1 - false / y_test.shape[0])
 
 #   mathematical  of MIXTURE OF GAUSSIAN DISTRIBUTION  :
 #   this model considers that the distribution of each class have a gaussian distribution.
@@ -145,14 +136,14 @@ print("accuracy",false,"of",t.shape[0],1-false/y_test.shape[0])
 #   logistic regression is a generalization of GMM, because it doesn't need to be gaussian distribution, they can follow Exponential Family ["Gaussian","exponential","Gamma","Beta",...etc]
 #   The form of this family is P(x,theta) = exp(theta.T * T(x) - A(theta) + B(x)) we can see that it has the exponential characteristics, the difference happens in the A and B function.
 #
-#   Cost function:
+#   maximization function:
 #   for the Exponential family the POSTERIOR will also equal to sigmoid function so we done need to calculate it and go straight to calculating the posterior which help us to change the Weights of the sigmoid function
 #   Using likelihood to find the best Wights for the posterior, using the posterior to predict the outcome and using the yi that denote the class, the equation for single data point and two classes
 #       w* = argmax σ(WX)^y ( 1 - σ(WX)) ^ 1 - y
 #       the y will choose which probability will be considered for each data point, so each data point will return the probability that for a
 #       given weights the probability that this point will be in the class is equal to it, and to maximize we consider the entire dataset
 #       w* = argmax ∏  σ(WX)^yn ( 1 - σ(WX)) ^ (1 - yn) , using log then derivative of weights, it will equal to σ(a)(1-σ(a))
-#       from this expression the cost function will equal ∑ [σ(Wx)-y]x
+#       from this expression the gradient function will equal ∑ [σ(Wx)-y]x
 #       and because we can't isolate the W here we can't find a closed form solution for it so we use gradient or newton's method instead
 
 #   Newton method:
