@@ -1,0 +1,140 @@
+lec 10: tips for applying ML
+   1.evaluating a hypothesis:
+       you can use missclassification error to calculate the error, give 1 when y_actual and y_predict doesn't equal each other and 0 otherwise
+   2.model selection problems:
+       ex: evaluating  the lambda of regularization or the degree of polynomial
+       solved using cross-validation test
+   3. learning curves:
+       learning curves is used to detemine if more data gives lower error
+       1.Graph of training and validation error against a data set size:
+           training error will increase
+           cross validation error will decreases as more model will fit the data better
+       2.Graph for high bias or variance:
+           1.high bias:
+               the curve is the same as first one, and for big size data set the error will not have a large difference because it already fit the best hypothesis for
+                this dataset, and the validation and training error will be close
+            Problem: for high set size the value of the error will be high too.
+                this means that at a certain point more data will not result to lower error if the model suffer from high bias
+            conclusion: must test for high bias before searching for more data to check if it will help
+           2.high variance:
+               for complex models with high variance, it will have the same shape as the first two, but there is a gap between the validation and training error
+               the difference between high bias and high variance is that in large size data set the validation and training
+                   error will be close in lower error value for the high variance case
+               conclusion:
+                   for high variance we might increase the size of the data to help the model, but the complex the model the more data it needs
+   4. bias/variance: ["check notes on waterloo course on this matter"]
+       bias is underfitting problem and variance is overfitting problem
+       1.graph of training and cross validation error fpr a given polynomial degree
+           the training error decrees as degree increase and that is because overfitting result to a small training error
+           the validation will have a convex shape that have a high error because of underfitting "bias" then decreases the error to global minimum
+           than increase because of overfitting problem, so the best solution is the lowest validation error
+       2.choosing the best regularization constant:
+           1.graph of training error and validation error for regularization constant:
+                training error will increase because the equation of error have regularization as a term in it
+           after choosing the model we use cross validation to check the minimum error value
+   5. increasing model performance
+       1.increase dataset size              VARIANCE
+       2.try subset of features set         VARIANCE
+       3.new features                       BIAS
+       4.lower regularization constant      BIAS
+       5.higher regularization constant     BIAS
+       6.adding polynomial features         VARIANCE
+
+lec 11 : classification
+    1.the confusion matrix:
+        it is used to define the performance of a classification in the recall and precision and we use F1 score to determine the best
+        threshold function that get the highest score, and that's because sometime the ratio between two classes is high " skewed classes" , so it might be hard to determine if the
+        algorithm is working correctly
+    2.prioritizing
+           1,collect data
+           2.develop more sophisticated features "features that might be useful"
+        how to approach:
+           1.start with simple algorithm and test it using cross validation data
+           2.plot learning curve to decide if more data is better
+           3.error analysis manually examine the algorithm for the errors to check if there is a systematic error to add a new feature that might help
+   tip: there should be a numerical evaluation to test the algorithm performance, and you can test adding a characteristic in model using cross-validation test
+       ex: considering discount and discounting the same word in nlp
+
+lec 12: too much and recap it from the waterloo course, andrews just tell us what happen but no tips or mathematical proofs
+
+lec 13: waterloo notes will be better
+
+lec 14 :  Dimensionality Reduction "PCA"
+    it is used to lower the dimensions of the dataset. because most of these features are correlated that mean there is a redundancy in the dataset, so we have two methods to
+     reduce the dimension of the dataset
+        1.feature selection:
+         which select a subset of the feature set, there is manual selection and automated selection, manual uses heatmap and
+          checking for if the feature is related to the prediction or it is redundant, automated have 3 methods:
+            1.Filter
+            2.Wrapper
+            3.Embedded
+        2.feature Extraction:
+         which reduce the data using method to create new feature that project the data from higher dimension to lower
+            1.Principal Component Analysis (PCA)
+            2.Linear Discriminant Analysis (LDA)
+            3.Generalized Discriminant Analysis (GDA)
+        Tip: Correlation is highly deceptive as it doesn't capture strong non-linear relationships, mutual information methods can capture any kind of statistical dependency,
+         but being nonparametric, they require more samples for accurate estimation
+     PCA:
+        Advantage:
+            1.This is used in data compression, hence reduced storage space
+            2.reduces computation time
+            3.remove redundant features
+        Disadvantage:
+            1.data loss
+            2.PCA tends to find linear correlations between variables, which is sometimes undesirable.
+            3.PCA fails in cases where mean and covariance are not enough to define datasets.
+
+        dimension reduction from n to K steps:
+            1.normalize the dataset
+            2.calculate the co-variance matrix
+            3.Compute the eigenvectors
+            4.select the number K of vectors
+            5.map dataset using the result matrix
+        Choosing K:
+            it is an iterative process which we use formula to check the variance loss and picking the best dimension reduction to variance loss
+
+            using formula of average squared projection error / total variance of the data <= 0.01
+            average squared projection error = 1 / m ∑ || x - x_projected || ^ 2
+            total variance of the data =1 / m  ∑ || x || ^ 2
+
+            tip: 1.the x_projected can be calculated using diagonalized matrix which means O(n) not O(n*n) calculation complexity
+                 2.don't use it for overfitting because it throws away part of the information that is in the data
+                  so it might works but a bad application, use different methods like regularization
+                 3. use it if the original dataset doesn't produce what you wanted
+lec 15: Anomaly Detection:
+    it is used to detect unusual data using data distribution as measurement
+    1.Calculating the probability of sample:
+        using the training data for each feature we calculate the mean and variance to get the normal distribution equation
+         using the normal equation we can calculate the probability of test sample, and for each feature we calculate the probability
+         then use pi summation to get the product of probability, we can use multi variant distribution of the data which is better but computational cost is higher
+         and require to have more data than feature
+         if it was less than a pre-defined value the sample is Anomaly.
+    2.Anomaly Detection vs supervised learning:
+        1.very small number of positive example and large number of negative example        "Anomaly Detection"
+        2.different types of anomalies                                                      "Anomaly Detection"
+        3.future anomalies may look nothing alike previous anomalies                        "Anomaly Detection"
+        4.Large number of positive and negative example                                     "SuperVised"
+        5.enough positive to detect training and future anomalies value                     "SuperVised"
+     tip:
+        1.training in anomaly detection is calculating the distribution, it doesn't use gradient decent, and we use non-anomalous data for training "unlabeled"
+        2.cross validation and test dataset is labeled, and the cross validation is used to determine the value of the pre-defined hyperparameter
+        3.evaluating the model using F1 score and confusion matrix
+        4.you can use log function to make the data gaussian, but it is not a requirement for it to work
+        5.using error analysis we can come up with new features to help us detect the anomaly samples
+        6.choose features that will be highly effected if the data is anomaly
+        7.the pi sum of probability is equal to the multi variate gaussian probability if the co-variance matrix is diagonal matrix "Non angular"
+        8.co variance matrix will be singular if there is a redundancy in the features or set size smaller than # features
+lec 16: Recommender Systems:
+        rewatch, boring lecture
+lec 17: Large scale Machine learning:
+    1.Online learning:
+        if there is a stream of data "large amount" we can train our model with each single sample alone and never use it again,this will
+         will be faster and will adapt changes that might happen with data, Example: if the data is correlated with what people prefer now,
+         changing of people preference will change the model too to adapt it the new data.
+         but if the data is small it is better to store it and train it together
+    Tips:
+        1.using Stochastic gradient might not reach the global minimum "or local" but it will be near it
+        2.All gradient require to iterate couple of times
+        3.mini-batch is better than Stochastic because of vectorization which is the process of converting an algorithm
+         from operating on a single value at a time to operating on a set of values at one time "look at it and "support vector instructions""
